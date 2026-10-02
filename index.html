@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Bindu Archives</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500;1,600&family=Manrope:wght@300;400;500;600;700;800&family=Caveat:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body data-scene="hero">
+
+<div class="orbs"><i></i><i></i><i></i></div>
+<div class="gridlines"></div>
+
+<main id="app">
+
+  <section class="scene hero active" id="hero">
+    <header class="topbar">
+      <span class="mark">THE BINDU ARCHIVES</span>
+      <span class="tag">PRIVATE ARCHIVE</span>
+      <span class="vol">VOL. 01</span>
+    </header>
+
+    <div class="hero-core">
+      <p class="eyebrow"><span class="dot"></span>A little museum of the person I got to know</p>
+      <h1 class="mega" id="heroTitle" aria-label="The Bindu I See"></h1>
+      <p class="sub">Not a story. Not a tribute. Just a few pieces of you that I wanted to keep.</p>
+      <div class="cta-row">
+        <button class="btn primary" id="enterBtn"><span>ENTER THE ARCHIVE</span><i>→</i></button>
+        <p class="hint">♪ sound on is recommended</p>
+      </div>
+    </div>
+
+    <div class="fly-wrap" id="flyWrap" aria-hidden="true">
+      <div class="fly-in">
+        <div class="fly-track" id="flyTrack"></div>
+      </div>
+    </div>
+
+    <div class="marquee">
+      <div>
+        <span>NOT A STORY · NOT A TRIBUTE · JUST A FEW PIECES OF YOU · THE BINDU I SEE · NOT A STORY · NOT A TRIBUTE · JUST A FEW PIECES OF YOU · THE BINDU I SEE ·</span>
+        <span>NOT A STORY · NOT A TRIBUTE · JUST A FEW PIECES OF YOU · THE BINDU I SEE · NOT A STORY · NOT A TRIBUTE · JUST A FEW PIECES OF YOU · THE BINDU I SEE ·</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene letter" id="letter">
+    <div class="progress" id="letterProgress"></div>
+    <div class="reader" id="letterBody"></div>
+  </section>
+
+  <div id="exhibits"></div>
+
+  <section class="scene closing" id="closing">
+    <div class="reader" id="closingBody"></div>
+  </section>
+
+</main>
+
+<nav id="nav">
+  <button class="nb" id="prevBtn">← PREVIOUS</button>
+  <span class="count" id="count"></span>
+  <button class="nb" id="nextBtn">NEXT MEMORY →</button>
+</nav>
+
+<div id="gate">
+  <div class="gate-box" id="gateBox">
+    <div class="ask">
+      <p class="gate-label" id="gateLabel"></p>
+      <h2 class="gate-q" id="gateQ"></h2>
+      <div class="gate-actions">
+        <button class="yes" id="yesBtn"><span>YES</span></button>
+        <button class="no" id="noBtn">not yet</button>
+      </div>
+    </div>
+    <div class="deny">
+      <p id="denyMsg"></p>
+      <button class="yes ghost" id="againBtn"><span>TRY AGAIN</span></button>
+    </div>
+  </div>
+  <div class="announce">
+    <small id="annK"></small>
+    <b id="annB"></b>
+  </div>
+</div>
+
+<div id="player">
+  <button id="pp" aria-label="Play or pause">▶</button>
+  <button id="nx" aria-label="Next song">⏭</button>
+  <div class="eq"><i></i><i></i><i></i><i></i></div>
+  <div class="meta">
+    <small>♪ NOW PLAYING</small>
+    <b id="songTitle">—</b>
+    <div class="bar" id="bar"><i id="barFill"></i></div>
+  </div>
+  <input type="range" id="vol" min="0" max="1" step="0.01" value="0.8" aria-label="Volume">
+  <button id="mute" aria-label="Mute">SOUND</button>
+</div>
+
+<canvas id="fx"></canvas>
+<div id="flash"></div>
+<div class="vignette"></div>
+<div class="grain"></div>
+<div id="glow"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
