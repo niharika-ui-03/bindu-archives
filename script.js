@@ -157,8 +157,6 @@ Niharika** 🤍
       question: "Are you ready to see the first little piece of this archive?",
       title: "Ee photo endhuko…",
       effect: "develop",
-      layout: "background",
-      fit: "auto",
       objectPosition: "50% 30%",
       textPosition: "left",
       textWidth: "460px",
@@ -200,7 +198,6 @@ But naaku matram… *This one deserves a page.*
       question: "Can I show you why I kept this one?",
       title: "Ee smile ni em category lo pettali akka?",
       effect: "iris",
-      layout: "split",
       objectPosition: "50% 50%",
       textPosition: "right",
       textWidth: "460px",
@@ -273,7 +270,6 @@ One small smile.
       question: "Ready to meet another version of yourself?",
       title: "Akka, ee pose ki separate appreciation undhi 😂",
       effect: "swing",
-      layout: "split",
       objectPosition: "50% 50%",
       textPosition: "left",
       textWidth: "460px",
@@ -333,7 +329,6 @@ It's more like:
       question: "Do you want to know what I see in this picture?",
       title: "“Perfect picture” ante perfect place avasaram ledhu kadhaa…",
       effect: "split",
-      layout: "split",
       objectPosition: "50% 50%",
       textPosition: "right",
       textWidth: "460px",
@@ -403,7 +398,6 @@ Sometimes the person itself is enough to make the picture worth keeping💙.**
       question: "Promise you won't laugh at this one? 😂",
       title: "A Day Worth Remembering",
       effect: "dolly",
-      layout: "split",
       objectPosition: "50% 50%",
       textPosition: "left",
       textWidth: "460px",
@@ -495,7 +489,6 @@ And this photograph feels like one of those little pieces of happiness that happ
       question: "Do you remember this version of yourself?",
       title: "The Quiet Kind of Beautiful",
       effect: "film",
-      layout: "split",
       objectPosition: "50% 50%",
       textPosition: "right",
       textWidth: "460px",
@@ -579,7 +572,6 @@ You don't always need to *do* something to be memorable.
       question: "Okay… one confession first. Can I show you my favourite?",
       title: "The Frame That Won.",
       effect: "leak",
-      layout: "split",
       objectPosition: "50% 50%",
       textPosition: "left",
       textWidth: "460px",
@@ -888,10 +880,6 @@ your junior.** 🤍
 `
 };
 
-/* =====================================================================
-   LOGIC
-   ===================================================================== */
-
 const $ = (s, r = document) => r.querySelector(s);
 const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
@@ -910,16 +898,12 @@ function render(text, cls) {
   }).join("");
 }
 
-/* ---------- Hero title ---------- */
 const heroTitle = $("#heroTitle");
 let li = 0;
 heroTitle.innerHTML = [["THE", "BINDU"], ["I", "SEE"]].map((words, k) =>
   `<span class="line l${k}">${words.map(w => `<span class="w">${[...w].map(ch => `<span class="l" style="--i:${li++}">${ch}</span>`).join("")}</span>`).join(" ")}</span>`
 ).join("");
 
-/* ---------- Hero photo strip: flies in from the right, drifts to the left ----------
-   Track = two identical halves; CSS moves it by -50% so the loop has no jump.
-   Every photo is shown whole (never cropped). */
 const flyTrack = $("#flyTrack");
 (function buildStrip() {
   const makeHalf = () => {
@@ -930,7 +914,10 @@ const flyTrack = $("#flyTrack");
         const d = document.createElement("div");
         d.className = "fly";
         const img = document.createElement("img");
-        img.src = p.image; img.alt = ""; img.draggable = false; img.decoding = "async";
+        img.src = p.image;
+        img.alt = "";
+        img.draggable = false;
+        img.decoding = "async";
         img.addEventListener("error", () => d.remove());
         d.appendChild(img);
         half.appendChild(d);
@@ -942,14 +929,12 @@ const flyTrack = $("#flyTrack");
   flyTrack.appendChild(makeHalf());
 })();
 
-/* ---------- Letter + closing ---------- */
 $("#letterBody").innerHTML = `<div class="tag rv">THE BINDU I SEE</div>` + render(ARCHIVE.letter, "rv") +
   `<div class="cta-end rv"><button class="btn primary" id="beginBtn"><span>BEGIN WITH THE FIRST ONE</span><i>→</i></button></div>`;
 
 $("#closingBody").innerHTML = render(ARCHIVE.closing, "rv") +
   `<div class="outro"><p class="a rv">THE ARCHIVE ENDS HERE.</p><p class="b rv" data-thanks>But the person in it doesn't.</p><p class="c" id="thanks">Thank you for opening it.</p></div>`;
 
-/* ---------- Exhibits ---------- */
 function buildExhibit(p, i) {
   const el = document.createElement("section");
   el.className = `scene exhibit fx-${p.effect} pos-${p.textPosition}`;
@@ -999,8 +984,6 @@ function buildExhibit(p, i) {
   return ex;
 }
 
-/* The photo is ALWAYS shown whole: scaled to fit the free area beside / above
-   the text card and centred inside it. */
 function layout(ex) {
   if (!ex.nat) return;
   const W = innerWidth, H = innerHeight, p = ex.page, mobile = isMobile();
@@ -1020,7 +1003,8 @@ function layout(ex) {
   } else {
     rx = side; rw = W - 2 * side; rh = H - top - bottom;
   }
-  rw = Math.max(80, rw); rh = Math.max(80, rh);
+  rw = Math.max(80, rw);
+  rh = Math.max(80, rh);
 
   const s = Math.min(rw / ex.nat.w, rh / ex.nat.h);
   const fw = ex.nat.w * s, fh = ex.nat.h * s;
@@ -1038,12 +1022,27 @@ const order = [
   ...ARCHIVE.pages.map((p, i) => {
     const ex = buildExhibit(p, i);
     return {
-      type: "exhibit", el: ex.el, ex, gated: true, unlocked: false, page: p,
+      type: "exhibit",
+      el: ex.el,
+      ex,
+      gated: true,
+      unlocked: false,
+      page: p,
       label: `EXHIBIT ${pad(i + 1)} / ${pad(ARCHIVE.pages.length)}`,
-      annK: "EXHIBIT", annB: pad(i + 1)
+      annK: "EXHIBIT",
+      annB: pad(i + 1)
     };
   }),
-  { type: "closing", el: $("#closing"), gated: true, unlocked: false, page: ARCHIVE.ending, label: "FINAL PAGE", annK: "FINAL PAGE", annB: "· · ·" }
+  {
+    type: "closing",
+    el: $("#closing"),
+    gated: true,
+    unlocked: false,
+    page: ARCHIVE.ending,
+    label: "FINAL PAGE",
+    annK: "FINAL PAGE",
+    annB: "· · ·"
+  }
 ];
 
 const layoutAll = () => order.forEach(o => o.ex && layout(o.ex));
@@ -1054,18 +1053,12 @@ let cur = 0;
 let busy = false;
 let activeTilt = null;
 
-/* =====================================================================
-   MUSIC — one continuous playlist
-   1 present song → 2 Yentha Sakkagunnaave → 3 Yedurangula Vaana (Female)
-   → 4 Nee Kannu Neeli Samudram → 5 Yaevaindho → back to 1 (loops)
-   Changing pages never restarts it; if it stopped / was blocked it resumes.
-   ===================================================================== */
 const PLAYLIST = [
-  { file: ARCHIVE.song.file,          title: ARCHIVE.song.title },
-  { file: "assets/audio/song2.mp3",   title: "Yentha Sakkagunnaave" },
-  { file: "assets/audio/song3.mp3",   title: "Yedurangula Vaana (Female)" },
-  { file: "assets/audio/song4.mp3",   title: "Nee Kannu Neeli Samudram" },
-  { file: "assets/audio/song5.mp3",   title: "Yaevaindho" }
+  { file: ARCHIVE.song.file, title: ARCHIVE.song.title },
+  { file: "assets/audio/song2.mp3", title: "Yentha Sakkagunnaave" },
+  { file: "assets/audio/song3.mp3", title: "Ye Kannulu Choodani" },
+  { file: "assets/audio/song4.mp3", title: "Inkem Inkem Inkem Kaavaale" },
+  { file: "assets/audio/song5.mp3", title: "Yaevaindho" }
 ];
 
 const audio = new Audio();
@@ -1108,9 +1101,7 @@ function startTrack(i) {
   const p = audio.play();
   if (p && p.then) p.then(() => fade(audio, 1, 2000)).catch(() => {});
 }
-// song finished -> next one (after the last, start again from the first)
 audio.addEventListener("ended", () => { errRun = 0; startTrack(idx + 1); });
-// missing/bad file -> skip it (stops trying if every file fails)
 audio.addEventListener("error", () => { if (++errRun <= PLAYLIST.length) startTrack(idx + 1); });
 audio.addEventListener("playing", () => { errRun = 0; });
 
@@ -1141,7 +1132,6 @@ bar.addEventListener("click", e => {
   audio.currentTime = audio.duration * ((e.clientX - r.left) / r.width);
 });
 
-/* ---------- Particle canvas ---------- */
 const cv = $("#fx"), cx = cv.getContext("2d");
 let W = 0, H = 0, dpr = 1, mouseX = .5;
 const MAXP = isMobile() ? 44 : 90;
@@ -1158,8 +1148,10 @@ const scratches = [];
 
 function resize() {
   dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-  W = innerWidth; H = innerHeight;
-  cv.width = W * dpr; cv.height = H * dpr;
+  W = innerWidth;
+  H = innerHeight;
+  cv.width = W * dpr;
+  cv.height = H * dpr;
 }
 resize();
 addEventListener("resize", () => {
@@ -1258,7 +1250,6 @@ function frame(now) {
 }
 requestAnimationFrame(frame);
 
-/* ---------- Readers (letter / closing) ---------- */
 const inited = new WeakSet();
 function initReader(scene) {
   if (inited.has(scene)) return;
@@ -1278,7 +1269,6 @@ letter.addEventListener("scroll", () => {
   letterProgress.style.width = (m > 0 ? letter.scrollTop / m * 100 : 0) + "%";
 });
 
-/* ---------- Navigation ---------- */
 const prevBtn = $("#prevBtn"), nextBtn = $("#nextBtn"), countEl = $("#count");
 function syncNav() {
   const t = order[cur];
@@ -1308,7 +1298,6 @@ function activate(target) {
   syncNav();
 }
 
-/* ---------- Gate (the "can I show you?" question) ---------- */
 const gate = $("#gate"), gateBox = $("#gateBox"), gQ = $("#gateQ"), gLabel = $("#gateLabel");
 const denies = ["Okay… this one can wait.", "Then we'll leave this memory here for now."];
 let pending = null, di = 0;
@@ -1363,7 +1352,7 @@ function go(target) {
   const t = order[target];
   activate(target);
   if (t.type === "letter") initReader(t.el);
-  ensurePlaying();   // every page change: start / resume the playlist (never restarts it)
+  ensurePlaying();
   if (t.gated && !t.unlocked) {
     document.body.classList.add("gated");
     setTimeout(() => openGate(t), 950);
