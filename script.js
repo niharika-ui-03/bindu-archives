@@ -1,4 +1,4 @@
-const ARCHIVE = {
+﻿const ARCHIVE = {
   song: {
     file: "assets/audio/song.mp3",
     title: "Ye Swapna Lokala Soundaryarasi"
@@ -1056,8 +1056,8 @@ let activeTilt = null;
 const PLAYLIST = [
   { file: ARCHIVE.song.file, title: ARCHIVE.song.title },
   { file: "assets/audio/song2.mp3", title: "Yentha Sakkagunnaave" },
-  { file: "assets/audio/song3.mp3", title: "Ye Kannulu Choodani" },
-  { file: "assets/audio/song4.mp3", title: "Inkem Inkem Inkem Kaavaale" },
+  { file: "assets/audio/ye-kannulu-choodani.mp3", title: "Ye Kannulu Choodani" },
+  { file: "assets/audio/inkem-inkem-kaavaale.mp3", title: "Inkem Inkem Inkem Kaavaale" },
   { file: "assets/audio/song5.mp3", title: "Yaevaindho" }
 ];
 
