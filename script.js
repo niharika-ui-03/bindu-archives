@@ -1,8 +1,4 @@
 ﻿const ARCHIVE = {
-  song: {
-    file: "assets/audio/song.mp3",
-    title: "Ye Swapna Lokala Soundaryarasi"
-  },
   ending: { question: "One last thing from your junior?" },
 
   letter: `
@@ -1053,84 +1049,8 @@ let cur = 0;
 let busy = false;
 let activeTilt = null;
 
-const PLAYLIST = [
-  { file: ARCHIVE.song.file, title: ARCHIVE.song.title },
-  { file: "assets/audio/song2.mp3", title: "Yentha Sakkagunnaave" },
-  { file: "assets/audio/ye-kannulu-choodani.mp3", title: "Ye Kannulu Choodani" },
-  { file: "assets/audio/inkem-inkem-kaavaale.mp3", title: "Inkem Inkem Inkem Kaavaale" },
-  { file: "assets/audio/song5.mp3", title: "Yaevaindho" }
-];
-
-const audio = new Audio();
-audio.preload = "auto";
-audio.mult = 0;
-let idx = 0, started = false, userPaused = false, master = 0.8, muted = false, errRun = 0;
-
-const player = $("#player"), pp = $("#pp"), nx = $("#nx"), muteBtn = $("#mute"), volEl = $("#vol"),
-      songEl = $("#songTitle"), bar = $("#bar"), fill = $("#barFill");
-
-const eff = () => muted ? 0 : master;
-const apply = t => { t.volume = Math.max(0, Math.min(1, t.mult * eff())); };
-function fade(t, to, ms, done) {
-  clearInterval(t.fi);
-  const from = t.mult, steps = Math.max(1, Math.round(ms / 40));
-  let n = 0;
-  t.fi = setInterval(() => {
-    n++;
-    t.mult = from + (to - from) * (n / steps);
-    apply(t);
-    if (n >= steps) { clearInterval(t.fi); if (done) done(); }
-  }, 40);
-}
-function syncPP() {
-  const playing = !audio.paused;
-  pp.textContent = playing ? "❚❚" : "▶";
-  player.classList.toggle("on", playing);
-}
-audio.addEventListener("play", syncPP);
-audio.addEventListener("pause", syncPP);
-
-function startTrack(i) {
-  idx = (i + PLAYLIST.length) % PLAYLIST.length;
-  clearInterval(audio.fi);
-  audio.src = PLAYLIST[idx].file;
-  audio.mult = 0;
-  apply(audio);
-  songEl.textContent = PLAYLIST[idx].title;
-  fill.style.width = "0%";
-  const p = audio.play();
-  if (p && p.then) p.then(() => fade(audio, 1, 2000)).catch(() => {});
-}
-audio.addEventListener("ended", () => { errRun = 0; startTrack(idx + 1); });
-audio.addEventListener("error", () => { if (++errRun <= PLAYLIST.length) startTrack(idx + 1); });
-audio.addEventListener("playing", () => { errRun = 0; });
-
-function ensurePlaying() {
-  if (!started) { started = true; startTrack(0); return; }
-  if (audio.paused && !userPaused) {
-    const p = audio.play();
-    if (p && p.then) p.then(() => fade(audio, 1, 900)).catch(() => {});
-  }
-}
-
-pp.addEventListener("click", () => {
-  if (!started) { userPaused = false; ensurePlaying(); return; }
-  if (audio.paused) { userPaused = false; audio.play().catch(() => {}); fade(audio, 1, 900); }
-  else { userPaused = true; fade(audio, 0, 600, () => audio.pause()); }
-});
-nx.addEventListener("click", () => { userPaused = false; started = true; startTrack(idx + 1); });
-muteBtn.addEventListener("click", () => {
-  muted = !muted;
-  apply(audio);
-  muteBtn.textContent = muted ? "MUTED" : "SOUND";
-  muteBtn.classList.toggle("off", muted);
-});
-volEl.addEventListener("input", () => { master = +volEl.value; apply(audio); });
-bar.addEventListener("click", e => {
-  if (!audio.duration) return;
-  const r = bar.getBoundingClientRect();
-  audio.currentTime = audio.duration * ((e.clientX - r.left) / r.width);
-});
+/* Music removed — kept as an empty function so the rest of the script still works */
+function ensurePlaying() {}
 
 const cv = $("#fx"), cx = cv.getContext("2d");
 let W = 0, H = 0, dpr = 1, mouseX = .5;
@@ -1245,7 +1165,6 @@ function frame(now) {
     cx.stroke();
   }
 
-  if (audio.duration) fill.style.width = (audio.currentTime / audio.duration * 100) + "%";
   requestAnimationFrame(frame);
 }
 requestAnimationFrame(frame);
@@ -1361,7 +1280,6 @@ function go(target) {
 
 $("#enterBtn").addEventListener("click", () => {
   burstFrom($("#enterBtn"));
-  document.body.classList.add("ui-on");
   go(1);
 });
 $("#beginBtn").addEventListener("click", () => go(2));
